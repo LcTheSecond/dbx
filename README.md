@@ -1,12 +1,11 @@
 dbx
-[![Go Report Card](https://goreportcard.com/badge/github.com/pocketbase/dbx)](https://goreportcard.com/report/github.com/pocketbase/dbx)
-[![GoDoc](https://godoc.org/github.com/pocketbase/dbx?status.svg)](https://pkg.go.dev/github.com/pocketbase/dbx)
+[![Go Report Card](https://goreportcard.com/badge/github.com/LcTheSecond/dbx)](https://goreportcard.com/report/github.com/LcTheSecond/dbx)
+[![GoDoc](https://godoc.org/github.com/LcTheSecond/dbx?status.svg)](https://pkg.go.dev/github.com/LcTheSecond/dbx)
 ================================================================================
 
 > ⚠️ This is a maintained fork of [go-ozzo/ozzo-dbx](https://github.com/go-ozzo/ozzo-dbx) (see [#103](https://github.com/go-ozzo/ozzo-dbx/issues/103)).
 >
 > Currently, the changes are primarily related to better SQLite support and some other minor improvements, implementing [#99](https://github.com/go-ozzo/ozzo-dbx/pull/99), [#100](https://github.com/go-ozzo/ozzo-dbx/pull/100) and [#102](https://github.com/go-ozzo/ozzo-dbx/pull/102).
-
 
 ## Summary
 
@@ -19,35 +18,34 @@ dbx
 - [Executing Queries](#executing-queries)
 - [Binding Parameters](#binding-parameters)
 - [Building Queries](#building-queries)
-	- [Building SELECT Queries](#building-select-queries)
-	- [Building Query Conditions](#building-query-conditions)
-	- [Building Data Manipulation Queries](#building-data-manipulation-queries)
-	- [Building Schema Manipulation Queries](#building-schema-manipulation-queries)
+  - [Building SELECT Queries](#building-select-queries)
+  - [Building Query Conditions](#building-query-conditions)
+  - [Building Data Manipulation Queries](#building-data-manipulation-queries)
+  - [Building Schema Manipulation Queries](#building-schema-manipulation-queries)
 - [CRUD Operations](#crud-operations)
-	- [Create](#create)
-	- [Read](#read)
-	- [Update](#update)
-	- [Delete](#delete)
-	- [Null Handling](#null-handling)
+  - [Create](#create)
+  - [Read](#read)
+  - [Update](#update)
+  - [Delete](#delete)
+  - [Null Handling](#null-handling)
 - [Quoting Table and Column Names](#quoting-table-and-column-names)
 - [Using Transactions](#using-transactions)
 - [Logging Executed SQL Statements](#logging-executed-sql-statements)
 - [Supporting New Databases](#supporting-new-databases)
-
 
 ## Description
 
 `dbx` is a Go package that enhances the standard `database/sql` package by providing powerful data retrieval methods
 as well as DB-agnostic query building capabilities. `dbx` is not an ORM. It has the following features:
 
-* Populating data into structs and NullString maps
-* Named parameter binding
-* DB-agnostic query building methods, including SELECT queries, data manipulation queries, and schema manipulation queries
-* Inserting, updating, and deleting model structs
-* Powerful query condition building
-* Open architecture allowing addition of new database support or customization of existing support
-* Logging executed SQL statements
-* Supporting major relational databases
+- Populating data into structs and NullString maps
+- Named parameter binding
+- DB-agnostic query building methods, including SELECT queries, data manipulation queries, and schema manipulation queries
+- Inserting, updating, and deleting model structs
+- Powerful query condition building
+- Open architecture allowing addition of new database support or customization of existing support
+- Logging executed SQL statements
+- Supporting major relational databases
 
 For an example on how this library is used in an application, please refer to [go-rest-api](https://github.com/qiangxue/go-rest-api) which is a starter kit for building RESTful APIs in Go.
 
@@ -60,7 +58,7 @@ Go 1.13 or above.
 Run the following command to install the package:
 
 ```
-go get github.com/pocketbase/dbx
+go get github.com/LcTheSecond/dbx
 ```
 
 In addition, install the specific DB driver package for the kind of database to be used. Please refer to
@@ -81,11 +79,11 @@ import _ "github.com/go-sql-driver/mysql"
 
 The following databases are fully supported out of box:
 
-* SQLite
-* MySQL
-* PostgreSQL
-* MS SQL Server (2012 or above)
-* Oracle
+- SQLite
+- MySQL
+- PostgreSQL
+- MS SQL Server (2012 or above)
+- Oracle
 
 For other databases, the query building feature may not work as expected. You can create a custom builder to
 solve the problem. Please see the last section for more details.
@@ -98,7 +96,7 @@ The following code snippet shows how you can use this package in order to access
 package main
 
 import (
-	"github.com/pocketbase/dbx"
+	"github.com/LcTheSecond/dbx"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -140,7 +138,7 @@ And the following example shows how to use the query building capability of this
 package main
 
 import (
-	"github.com/pocketbase/dbx"
+	"github.com/LcTheSecond/dbx"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -176,9 +174,9 @@ To connect to a database, call `dbx.Open()` in the same way as you would do with
 db, err := dbx.Open("mysql", "user:pass@hostname/db_name")
 ```
 
-The method returns a `dbx.DB` instance which can be used to create and execute DB queries. Note that the method 
+The method returns a `dbx.DB` instance which can be used to create and execute DB queries. Note that the method
 does not really establish a connection until a query is made using the returned `dbx.DB` instance. It also
-does not check the correctness of the data source name either. Call `dbx.MustOpen()` to make sure the data 
+does not check the correctness of the data source name either. Call `dbx.MustOpen()` to make sure the data
 source name is correct.
 
 ## Executing Queries
@@ -192,14 +190,14 @@ q := db.NewQuery("UPDATE users SET status=1 WHERE id=100")
 result, err := q.Execute()
 ```
 
-If the SQL statement does retrieve data (e.g. a SELECT statement), one of the following methods should be called, 
+If the SQL statement does retrieve data (e.g. a SELECT statement), one of the following methods should be called,
 which will execute the query and populate the result into the specified variable(s).
 
-* `Query.All()`: populate all rows of the result into a slice of structs or `NullString` maps.
-* `Query.One()`: populate the first row of the result into a struct or a `NullString` map.
-* `Query.Column()`: populate the first column of the result into a slice.
-* `Query.Row()`: populate the first row of the result into a list of variables, one for each returning column.
-* `Query.Rows()`: returns a `dbx.Rows` instance to allow retrieving data row by row.
+- `Query.All()`: populate all rows of the result into a slice of structs or `NullString` maps.
+- `Query.One()`: populate the first row of the result into a struct or a `NullString` map.
+- `Query.Column()`: populate the first column of the result into a slice.
+- `Query.Row()`: populate the first row of the result into a list of variables, one for each returning column.
+- `Query.Rows()`: returns a `dbx.Rows` instance to allow retrieving data row by row.
 
 For example,
 
@@ -251,20 +249,20 @@ for rows.Next() {
 
 When populating a struct, the following rules are used to determine which columns should go into which struct fields:
 
-* Only exported struct fields can be populated.
-* A field receives data if its name is mapped to a column according to the field mapping function `Query.FieldMapper`.
+- Only exported struct fields can be populated.
+- A field receives data if its name is mapped to a column according to the field mapping function `Query.FieldMapper`.
   The default field mapping function separates words in a field name by underscores and turns them into lower case.
   For example, a field name `FirstName` will be mapped to the column name `first_name`, and `MyID` to `my_id`.
-* If a field has a `db` tag, the tag value will be used as the corresponding column name. If the `db` tag is a dash `-`,
+- If a field has a `db` tag, the tag value will be used as the corresponding column name. If the `db` tag is a dash `-`,
   it means the field should NOT be populated.
-* For anonymous fields that are of struct type, they will be expanded and their component fields will be populated
+- For anonymous fields that are of struct type, they will be expanded and their component fields will be populated
   according to the rules described above.
-* For named fields that are of struct type, they will also be expanded. But their component fields will be prefixed
+- For named fields that are of struct type, they will also be expanded. But their component fields will be prefixed
   with the struct names when being populated.
-  
+
 An exception to the above struct expansion is that when a struct type implements `sql.Scanner` or when it is `time.Time`.
 In this case, the field will be populated as a whole by the DB driver. Also, if a field is a pointer to some type,
-the field will be allocated memory and populated with the query result if it is not null. 
+the field will be allocated memory and populated with the query result if it is not null.
 
 The following example shows how fields are populated according to the rules above:
 
@@ -286,11 +284,11 @@ type Address struct {
 }
 ```
 
-* `User.id`: not populated because the field is not exported;
-* `User.Type`: not populated because the `db` tag is `-`;
-* `User.MyName`: to be populated from the `name` column, according to the `db` tag;
-* `Profile.Age`: to be populated from the `age` column, since `Profile` is an anonymous field;
-* `Address.City`: to be populated from the `addr.city` column, since `Address` is a named field of struct type
+- `User.id`: not populated because the field is not exported;
+- `User.Type`: not populated because the `db` tag is `-`;
+- `User.MyName`: to be populated from the `name` column, according to the `db` tag;
+- `Profile.Age`: to be populated from the `age` column, since `Profile` is an anonymous field;
+- `Address.City`: to be populated from the `addr.city` column, since `Address` is a named field of struct type
   and its fields will be prefixed with `addr.` according to the `db` tag.
 
 Note that if a column in the result does not have a corresponding struct field, it will be ignored. Similarly,
@@ -300,8 +298,8 @@ if a struct field does not have a corresponding column in the result, it will no
 
 A SQL statement is usually parameterized with dynamic values. For example, you may want to select the user record
 according to the user ID received from the client. Parameter binding should be used in this case, and it is almost
-always preferred to prevent from SQL injection attacks. Unlike `database/sql` which does anonymous parameter binding, 
-`dbx` uses named parameter binding. *Anonymous parameter binding is not supported*, as it will mess up with named
+always preferred to prevent from SQL injection attacks. Unlike `database/sql` which does anonymous parameter binding,
+`dbx` uses named parameter binding. _Anonymous parameter binding is not supported_, as it will mess up with named
 parameters. For example,
 
 ```go
@@ -330,7 +328,6 @@ err = q.One(&user)
 // ...
 ```
 
-
 ## Cancelable Queries
 
 Queries are cancelable when they are used with `context.Context`. In particular, by calling `Query.WithContext()` you
@@ -340,7 +337,6 @@ can associate a context with a query and use the context to cancel the query whi
 q := db.NewQuery("SELECT id, name FROM users")
 err := q.WithContext(ctx).All(&users)
 ```
-
 
 ## Building Queries
 
@@ -364,7 +360,7 @@ err := db.Select("id", "name").
 The above code will generate and execute the following SQL statement:
 
 ```sql
-SELECT `id`, `name` FROM `users` WHERE `id`={:p0} 
+SELECT `id`, `name` FROM `users` WHERE `id`={:p0}
 ```
 
 Notice how the table and column names are properly quoted according to the currently using database type.
@@ -377,7 +373,6 @@ together, just like you would do when writing a plain SQL. Each of these methods
 `One()`, `All()` to execute the query and populate data into variables. You may also explicitly call `Build()`
 to build the query and turn it into a `dbx.Query` instance which may allow you to get the SQL statement and do
 other interesting work.
-
 
 ### Building Query Conditions
 
@@ -402,33 +397,32 @@ When building a query condition expression, its parameter values will be populat
 prevents SQL injection from happening. Also if an expression involves column names, they will be properly quoted.
 The following condition building functions are available:
 
-* `dbx.NewExp()`: creating a condition using the given expression string and binding parameters. For example,
-`dbx.NewExp("id={:id}", dbx.Params{"id":100})` would create the expression `id=100`.
-* `dbx.HashExp`: a map type that represents name-value pairs concatenated by `AND` operators. For example,
-`dbx.HashExp{"id":100, "status":1}` would create `id=100 AND status=1`.
-* `dbx.Not()`: creating a `NOT` expression by prepending `NOT` to the given expression.
-* `dbx.And()`: creating an `AND` expression by concatenating the given expressions with the `AND` operators.
-* `dbx.Or()`: creating an `OR` expression by concatenating the given expressions with the `OR` operators.
-* `dbx.In()`: creating an `IN` expression for the specified column and the range of values.
-For example, `dbx.In("age", 30, 40, 50)` would create the expression `age IN (30, 40, 50)`.
-Note that if the value range is empty, it will generate an expression representing a false value.
-* `dbx.NotIn()`: creating an `NOT IN` expression. This is very similar to `dbx.In()`. 
-* `dbx.Like()`: creating a `LIKE` expression for the specified column and the range of values. For example, 
-`dbx.Like("title", "golang", "framework")` would create the expression `title LIKE "%golang%" AND title LIKE "%framework%"`.
-You can further customize a LIKE expression by calling `Escape()` and/or `Match()` functions of the resulting expression.
-Note that if the value range is empty, it will generate an empty expression. 
-* `dbx.NotLike()`: creating a `NOT LIKE` expression. This is very similar to `dbx.Like()`.
-* `dbx.OrLike()`: creating a `LIKE` expression but concatenating different `LIKE` sub-expressions using `OR` instead of `AND`.
-* `dbx.OrNotLike()`: creating a `NOT LIKE` expression and concatenating different `NOT LIKE` sub-expressions using `OR` instead of `AND`.
-* `dbx.Exists()`: creating an `EXISTS` expression by prepending `EXISTS` to the given expression.
-* `dbx.NotExists()`: creating a `NOT EXISTS` expression by prepending `NOT EXISTS` to the given expression.
-* `dbx.Between()`: creating a `BETWEEN` expression. For example, `dbx.Between("age", 30, 40)` would create the 
-expression `age BETWEEN 30 AND 40`.
-* `dbx.NotBetween()`: creating a `NOT BETWEEN` expression. For example
+- `dbx.NewExp()`: creating a condition using the given expression string and binding parameters. For example,
+  `dbx.NewExp("id={:id}", dbx.Params{"id":100})` would create the expression `id=100`.
+- `dbx.HashExp`: a map type that represents name-value pairs concatenated by `AND` operators. For example,
+  `dbx.HashExp{"id":100, "status":1}` would create `id=100 AND status=1`.
+- `dbx.Not()`: creating a `NOT` expression by prepending `NOT` to the given expression.
+- `dbx.And()`: creating an `AND` expression by concatenating the given expressions with the `AND` operators.
+- `dbx.Or()`: creating an `OR` expression by concatenating the given expressions with the `OR` operators.
+- `dbx.In()`: creating an `IN` expression for the specified column and the range of values.
+  For example, `dbx.In("age", 30, 40, 50)` would create the expression `age IN (30, 40, 50)`.
+  Note that if the value range is empty, it will generate an expression representing a false value.
+- `dbx.NotIn()`: creating an `NOT IN` expression. This is very similar to `dbx.In()`.
+- `dbx.Like()`: creating a `LIKE` expression for the specified column and the range of values. For example,
+  `dbx.Like("title", "golang", "framework")` would create the expression `title LIKE "%golang%" AND title LIKE "%framework%"`.
+  You can further customize a LIKE expression by calling `Escape()` and/or `Match()` functions of the resulting expression.
+  Note that if the value range is empty, it will generate an empty expression.
+- `dbx.NotLike()`: creating a `NOT LIKE` expression. This is very similar to `dbx.Like()`.
+- `dbx.OrLike()`: creating a `LIKE` expression but concatenating different `LIKE` sub-expressions using `OR` instead of `AND`.
+- `dbx.OrNotLike()`: creating a `NOT LIKE` expression and concatenating different `NOT LIKE` sub-expressions using `OR` instead of `AND`.
+- `dbx.Exists()`: creating an `EXISTS` expression by prepending `EXISTS` to the given expression.
+- `dbx.NotExists()`: creating a `NOT EXISTS` expression by prepending `NOT EXISTS` to the given expression.
+- `dbx.Between()`: creating a `BETWEEN` expression. For example, `dbx.Between("age", 30, 40)` would create the
+  expression `age BETWEEN 30 AND 40`.
+- `dbx.NotBetween()`: creating a `NOT BETWEEN` expression. For example
 
 You may also create other convenient functions to help building query conditions, as long as the functions return
 an object implementing the `dbx.Expression` interface.
- 
 
 ### Building Data Manipulation Queries
 
@@ -487,15 +481,15 @@ func (c MyCustomer) TableName() string {
 }
 ```
 
-Note that the `TableName` method should be defined with a value receiver instead of a pointer receiver. 
+Note that the `TableName` method should be defined with a value receiver instead of a pointer receiver.
 
 If the struct has a field named `ID` or `Id`, by default the field will be treated as the primary key field.
 If you want to use a different field as the primary key, tag it with `db:"pk"`. You may tag multiple fields
 for composite primary keys. Note that if you also want to explicitly specify the column name for a primary key field,
 you should use the tag format `db:"pk,col_name"`.
 
-You can give a common prefix or suffix to your table names by defining your own table name mapping via 
-`DB.TableMapFunc`. For example, the following code prefixes `tbl_` to all table names. 
+You can give a common prefix or suffix to your table names by defining your own table name mapping via
+`DB.TableMapFunc`. For example, the following code prefixes `tbl_` to all table names.
 
 ```go
 db.TableMapper = func(a interface{}) string {
@@ -525,8 +519,8 @@ customer := Customer{
 err := db.Model(&customer).Insert()
 ```
 
-This will insert a row using the values from *all* public fields (except the primary key field if it is empty) in the struct.
-If a primary key field is zero (a integer zero or a nil pointer), it is assumed to be auto-incremental and 
+This will insert a row using the values from _all_ public fields (except the primary key field if it is empty) in the struct.
+If a primary key field is zero (a integer zero or a nil pointer), it is assumed to be auto-incremental and
 will be automatically filled with the last insertion ID after a successful insertion.
 
 You can explicitly specify the fields that should be inserted by passing the list of the field names to the `Insert()` method.
@@ -578,11 +572,10 @@ of the struct type name will be the table name.
 You may also call `SelectQuery.All()` to read a list of model structs. Similarly, you do not need to call `From()`
 if the table name can be inferred from the model structs.
 
-
 ### Update
 
 To update a model, call the `ModelQuery.Update()` method. Like `Insert()`, by default, the `Update()` method will
-update *all* public fields except primary key fields of the model. You can explicitly specify which fields can
+update _all_ public fields except primary key fields of the model. You can explicitly specify which fields can
 be updated and which cannot in the same way as described for the `Insert()` method. For example,
 
 ```go
@@ -599,7 +592,6 @@ err = db.Model(&customer).Exclude("Status").Update()
 Note that the `Update()` method assumes that the primary keys are immutable. It uses the primary key value of the model
 to look for the row that should be updated. An error will be returned if a model does not have a primary key.
 
-
 ### Delete
 
 To delete a model, call the `ModelQuery.Delete()` method. The method deletes the row using the primary key value
@@ -613,13 +605,13 @@ err := db.Model(&customer).Delete()
 
 ### Null Handling
 
-To represent a nullable database value, you can use a pointer type. If the pointer is nil, it means the corresponding 
-database value is null. 
+To represent a nullable database value, you can use a pointer type. If the pointer is nil, it means the corresponding
+database value is null.
 
 Another option to represent a database null is to use `sql.NullXyz` types. For example, if a string column is nullable,
-you may use `sql.NullString`. The `NullString.Valid` field indicates whether the value is a null or not, and 
-`NullString.String` returns the string value when it is not null. Because `sql.NulLXyz` types do not handle JSON 
-marshalling, you may use the [null package](https://github.com/guregu/null), instead. 
+you may use `sql.NullString`. The `NullString.Valid` field indicates whether the value is a null or not, and
+`NullString.String` returns the string value when it is not null. Because `sql.NulLXyz` types do not handle JSON
+marshalling, you may use the [null package](https://github.com/guregu/null), instead.
 
 Below is an example of handling nulls:
 
@@ -636,7 +628,7 @@ type Customer struct {
 
 Databases vary in quoting table and column names. To allow writing DB-agnostic SQLs, `dbx` introduces a special
 syntax in quoting table and column names. A word enclosed within `{{` and `}}` is treated as a table name and will
-be quoted according to the particular DB driver. Similarly, a word enclosed within `[[` and `]]` is treated as a 
+be quoted according to the particular DB driver. Similarly, a word enclosed within `[[` and `]]` is treated as a
 column name and will be quoted accordingly as well. For example, when working with a MySQL database, the following
 query will be properly quoted:
 
@@ -676,7 +668,6 @@ transactions. The method will start a transaction and automatically roll back th
 returns an error. Otherwise it will
 automatically commit the transaction.
 
-
 ```go
 db, _ := dbx.Open("mysql", "user:pass@/example")
 
@@ -701,11 +692,12 @@ fmt.Println(err)
 
 You can log and instrument DB queries by installing loggers with a DB connection. There are three kinds of loggers you
 can install:
-* `DB.LogFunc`: this is called each time when a SQL statement is queried or executed. The function signature is the
-  same as that of `fmt.Printf`, which makes it very easy to use. 
-* `DB.QueryLogFunc`: this is called each time when querying with a SQL statement.
-* `DB.ExecLogFunc`: this is called when executing a SQL statement.
- 
+
+- `DB.LogFunc`: this is called each time when a SQL statement is queried or executed. The function signature is the
+  same as that of `fmt.Printf`, which makes it very easy to use.
+- `DB.QueryLogFunc`: this is called each time when querying with a SQL statement.
+- `DB.ExecLogFunc`: this is called when executing a SQL statement.
+
 The following example shows how you can make use of these loggers.
 
 ```go
@@ -717,7 +709,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/pocketbase/dbx"
+	"github.com/LcTheSecond/dbx"
 )
 
 func main() {
@@ -735,14 +727,14 @@ func main() {
 	}
 	// ...
 }
-``` 
+```
 
 ## Supporting New Databases
 
 While `dbx` provides out-of-box query building support for most major relational databases, its open architecture
 allows you to add support for new databases. The effort of adding support for a new database involves:
 
-* Create a struct that implements the `QueryBuilder` interface. You may use `BaseQueryBuilder` directly or extend it
+- Create a struct that implements the `QueryBuilder` interface. You may use `BaseQueryBuilder` directly or extend it
   via composition.
-* Create a struct that implements the `Builder` interface. You may extend `BaseBuilder` via composition.
-* Write an `init()` function to register the new builder in `dbx.BuilderFuncMap`.
+- Create a struct that implements the `Builder` interface. You may extend `BaseBuilder` via composition.
+- Write an `init()` function to register the new builder in `dbx.BuilderFuncMap`.
