@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	TestDSN     = "travis:@/pocketbase_dbx_test?parseTime=true"
+	TestDSN     = "travis:@/lcthesecond_dbx_test?parseTime=true"
 	FixtureFile = "testdata/mysql.sql"
 )
 
